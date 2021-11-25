@@ -17,35 +17,23 @@ class DbService {
     return instance ? instance : new DbService();
   }
 
-  createUser = async (userID, score) => {
+  createUser = async (email, password) => {
     try {
-      const date = new Date();
-
-      const insertDate = await new Promise((resolve, reject) => {
-        const query = `INSERT INTO user (name, email, password  ) 
-          VALUES ('${username}', '${score}', '${date}')`;
-        con.query(query, (err, result) => {
-          if (err) reject(new Error(err.message));
-          console.log(result);
-          resolve(result);
-        });
+      const query = `INSERT INTO user ( email, password  ) VALUES ('${email}', '${password}')`;
+      con.query(query, (err, result) => {
+        if (err) reject(new Error(err.message));
+        console.log(result);
+        resolve(result);
       });
-      return {
-        Username: username,
-        Score: score,
-        Date: insertDate,
-      };
     } catch (error) {
       console.log(error);
     }
   };
 
-  // Funktion zum Abrufen der Highscores in absteigender Reihenfolge
-  // Parameter x gibt an wie viele der besten Highscores angezeigt werden sollen
-  createTodo = async (x) => {
+  createTodo = async (name, userID) => {
     try {
       const response = await new Promise((resolve, reject) => {
-        const query = `SELECT * FROM player_score ORDER BY Score DESC LIMIT ${x}`;
+        const query = `INSERT INTO todo (name, userID) VALUES ('${name}','${userID}' )`;
 
         con.query(query, (err, result) => {
           if (err) reject(new Error(err.message));
@@ -58,10 +46,10 @@ class DbService {
     }
   };
 
-  getTodosOfUser = async () => {
+  getTodosOfUser = async (userID) => {
     try {
       const response = await new Promise((resolve, reject) => {
-        const query = `SELECT * FROM player_score ORDER BY Score DESC`;
+        const query = `SELECT * FROM todo WHERE userID === '${userID}'`;
 
         con.query(query, (err, result) => {
           if (err) reject(new Error(err.message));
@@ -74,12 +62,12 @@ class DbService {
     }
   };
 
-  // Überprüfen, ob vom User eingegebener Username bereits existiert
-  // Setzt Flag zum Erstellen eines neuen oder Ändern eines bereits bestehenden PlayerScores
-  checkUsername = async (username) => {
+  //
+
+  checkUser = async (email) => {
     try {
       const response = await new Promise((resolve, reject) => {
-        const query = `SELECT * FROM player_score WHERE Username = '${username}'`;
+        const query = `SELECT * FROM user WHERE email = '${email}'`;
         con.query(query, (err, result) => {
           if (err) reject(new Error(err.message));
           console.log(result);
@@ -92,19 +80,13 @@ class DbService {
     }
   };
 
-  async updatePlayerScore(username, score) {
+  async updateTodo(todoID, newName) {
     try {
-      const date = new Date();
-      const response = await new Promise((resolve, reject) => {
-        const query = `UPDATE player_Score SET Score = ${score}, Date = '${date}' WHERE Username = '${username}'`;
-
-        con.query(query, (err, result) => {
-          if (err) reject(new Error(err.message));
-          resolve(result);
-        });
+      const query = `UPDATE todo SET name = ${newName}, Date = NOW() WHERE todoID = '${todoID}'`;
+      con.query(query, (err, result) => {
+        if (err) reject(new Error(err.message));
+        resolve(result);
       });
-
-      return response === 1 ? true : false;
     } catch (error) {
       console.log(error);
       return false;

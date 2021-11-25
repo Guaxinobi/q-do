@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 
 export const Page = () => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [hashedPassword, setHashedPassword] = useState();
+
+  let navigate = useNavigate();
 
   useEffect(() => {
     console.log("hashedPassword: ", hashedPassword);
@@ -34,7 +37,12 @@ export const Page = () => {
               name="password"
               type="password"
             />
-            <button className="button">Sign in</button>
+            <button
+              onClick={() => navigate("../home", { replace: true })}
+              className="button"
+            >
+              Sign in
+            </button>
           </form>
         </div>
       </div>

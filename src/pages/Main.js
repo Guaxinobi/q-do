@@ -1,12 +1,24 @@
 import { ListComponent } from "../components";
-import { todos } from "../MockData.js";
-
+import { useTodo } from "../context/todo";
+import ReactLoading from "react-loading";
 export const Page = () => {
-  return (
-    <div className="main-page">
+  const { currentList } = useTodo();
+
+  console.log("currentList: ", currentList);
+  if (!currentList) {
+    return (
       <div>
-        <ListComponent items={todos} />
+        LOADING
+        <ReactLoading type="spinningBubbles" color="#00ff00" />
       </div>
-    </div>
-  );
+    );
+  } else {
+    return (
+      <div className="main-page">
+        <div>
+          <ListComponent items={currentList.todos} />
+        </div>
+      </div>
+    );
+  }
 };
