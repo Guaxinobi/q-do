@@ -10,23 +10,18 @@ export const Provider = ({ children }) => {
 
   const API_URL = "http://localhost:3001/api/auth";
 
-  const signUpUser = (name, email, password) =>
-    new Promise((resolve, reject) => {
-      axios
-        .post(API_URL + "/signup", {
-          name: name,
-          email: email,
-          password: password,
-        })
-        .then((res) => {
-          // if it works
-          resolve(res.data);
-          navigate("/", true);
-        })
-        .catch((err) => {
-          reject(err);
-        });
-    });
+  const signUpUser = (name, email, password) => {
+    return axios
+      .post(API_URL + "/signup", {
+        name: name,
+        email: email,
+        password: password,
+      })
+      .then((res) => {
+        return navigate("/", true);
+      })
+      .catch((err) => {});
+  };
 
   const signInUser = (email, password) => {
     return axios
@@ -38,6 +33,7 @@ export const Provider = ({ children }) => {
         if (res.data.accessToken) {
           localStorage.setItem("user", JSON.stringify(res.data));
         }
+        getCurrentUser();
         return res.data;
       })
       .catch((err) => {});
@@ -49,6 +45,7 @@ export const Provider = ({ children }) => {
   };
 
   const getCurrentUser = () => {
+    console.log("getCurrentUser");
     setUser(JSON.parse(localStorage.getItem("user")));
   };
 

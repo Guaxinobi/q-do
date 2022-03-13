@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     archived: {
       type: DataTypes.BOOLEAN,
-      allowNull: false,
+
       defaultValue: false,
     },
   });

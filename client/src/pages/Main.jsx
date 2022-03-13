@@ -1,12 +1,13 @@
-import { ListComponent } from "../components";
+import { List } from "../components";
 import { useTodo } from "../context/todo";
 import ReactLoading from "react-loading";
 import { PlusIcon } from "@heroicons/react/solid";
-import { useUser } from "../context/user";
 import { useEffect } from "react";
+import { useAuth } from "../context/auth";
 
 export const Page = () => {
-  const { user } = useUser();
+  const { todos, setTodos } = useTodo();
+  const { user } = useAuth();
   useEffect(() => {
     console.log("MAIN: ", user);
   }, [user]);
@@ -22,15 +23,17 @@ export const Page = () => {
     return (
       <div className="main-page">
         <div style={{ display: "flex", flexDirection: "column" }}>
-          <button className="add-todo">
-            <PlusIcon className="add-icon" />{" "}
+          <button className="add-button">
+            <PlusIcon className="add-icon rotate" />{" "}
             <span hidden>Create new todo</span>
             <form>
-              <input className="add-todo-input" />
+              <input className="add-item-input" />
             </form>
           </button>
 
-          {/*<ListComponent items={currentList.todos} />*/}
+          <div>
+            <List list={todos} setList={setTodos} todo={true} />
+          </div>
         </div>
       </div>
     );

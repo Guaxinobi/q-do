@@ -3,35 +3,55 @@ import { useNavigate } from "react-router";
 import { useAuth } from "../context/auth";
 
 export const Page = () => {
-  const { signInUser } = useAuth();
+  const { signInUser, user } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isWrong, setIsWrong] = useState(false);
+  const [isEmpty, setIsEmpty] = useState(false);
   let navigate = useNavigate();
 
-  const handleLogin = () => {
+  const handleLogin = (e) => {
+    e.preventDefault();
     console.log("HANDLELOGIN");
+    if (!email || !password) {
+      setIsEmpty(true);
+      return;
+    } else {
+      setIsEmpty(false);
+    }
 
-    signInUser(email, password)
-      .then((res) => {
-        setIsWrong(false);
-        navigate("/home");
-      })
-      .catch((err) => {
-        console.log("ERRROR:LOGIN: ", err);
+    signInUser(email, password).then((res) => {
+      if (!res) {
         setIsWrong(true);
-      });
+        return;
+      }
+      setIsWrong(false);
+      navigate("/home");
+    });
   };
 
-  useEffect(() => {}, [password, email, isWrong]);
+  useEffect(() => {}, [user]);
+
+  useEffect(() => {
+    // xor
+    if ((!email && password) || (email && !password)) {
+      setIsEmpty(true);
+      return;
+    } else {
+      setIsEmpty(false);
+    }
+  }, [password, email]);
   return (
     <div className="flex login-page ">
       <div className="login-container flex-grow">
         <div className="items-center">
-          <h1>Q-Do</h1>
+          <h1 className="logo">Q-Do</h1>
+          <span className="">
+            A simple Todo-App... <br /> but dark and cool!
+          </span>
         </div>
         <div className="items-center">
-          <h2>Login</h2>
+          <h5>Login</h5>
         </div>
         <div className="flex-col">
           <form className="flex-col" onSubmit={(e) => handleLogin(e)}>
@@ -49,7 +69,9 @@ export const Page = () => {
               onChange={(e) => setPassword(e.target.value)}
               type="password"
             />
-            <span hidden={!isWrong}>Wrong email/password combination</span>
+            {isWrong && <span>Wrong email/password combination</span>}
+            {isEmpty && <span>No empty fields allowed.</span>}
+
             <button type="submit" className="button">
               Sign in
             </button>

@@ -5,7 +5,7 @@ body {
   margin: 0;
   padding: 0;
   color: rgb(0, 255, 0);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: monospace !important;
   background-color: rgb(17, 17, 17);
 }
 
@@ -44,12 +44,20 @@ body {
   border: 2px yellow;
   align-items: center;
   background-color: black;
-  width: 300px;
+  width: 30%;
   height: 100vh;
   box-shadow: 0px 0px 10px 0px rgb(0, 255, 0);
   transition: ease-in-out;
   transition-duration: 500ms;
   justify-content: space-between;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.relative {
+  position: relative;
 }
 
 .side-nav-head {
@@ -60,8 +68,10 @@ body {
 }
 
 .side-nav-bottom {
+  position: absolute;
+  bottom: 0;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-items: ends;
   justify-content: end;
 }
@@ -75,15 +85,15 @@ body {
   color: rgb(17, 17, 17);
   font-weight: bold;
   text-align: center;
-  padding: 20px;
   width: 100%;
   text-shadow: 0px 0px 10px rgb(0, 255, 0);
   text-overflow: clip;
   white-space: nowrap;
   overflow: hidden;
-  font-size: 64px;
+  font-size: 96px;
   margin: 8px;
   transition: 500ms;
+  cursor: default;
 }
 
 .logo:hover {
@@ -114,21 +124,65 @@ body {
   align-items: center;
 }
 
+.pencil-icon {
+  height: 24px;
+  width: 24px;
+  margin-right: 4px;
+  cursor: pointer !important;
+  z-index: 10;
+}
+
+.x-icon {
+  height: 24px;
+  width: 24px;
+  margin-right: 4px;
+  cursor: pointer !important;
+  z-index: 10;
+}
+.logout-icon {
+  height: 24px;
+  width: 24px;
+  margin-right: 4px;
+}
+.logout-button {
+  border-radius: 8px;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0px 0px 10px 0px rgb(0, 255, 0);
+  transition: ease-in-out;
+  transition-duration: 500ms;
+}
+
+.logout-button:hover {
+  box-shadow: 0px 10px 10px 0px rgb(0, 255, 0);
+  transform: translateY(-8px);
+}
+
+.flex {
+  display: flex;
+}
 .flex-col {
   display: flex;
   flex-direction: column;
 }
 
+.justify-between {
+  justify-content: space-between;
+}
+
 .login-container {
-  min-width: 200px;
+  min-width: 300px;
   border-radius: 8px;
   background-color: black;
   display: flex;
   flex-direction: column;
-  padding: 16px;
+  padding: 32px;
 }
 
 .items-center {
+  display: flex;
+  flex-direction: column;
   justify-content: center;
   text-align: center;
 }
@@ -141,7 +195,7 @@ button {
   background-color: rgb(17, 17, 17);
   color: rgb(0, 255, 0);
   padding: 4px;
-
+  font-family: monospace;
   transition: easel;
   transition-duration: 500ms;
 }
@@ -233,6 +287,7 @@ select:-webkit-autofill:focus {
   position: relative;
   transition: ease-in-out;
   transition-duration: 500ms;
+  cursor: pointer;
 }
 
 .user-icon:hover {
@@ -240,8 +295,8 @@ select:-webkit-autofill:focus {
   transform: translateY(-8px);
 }
 
-.todo-text {
-  cursor: auto;
+.item-text {
+  cursor: pointer;
 }
 
 .open-sidebar {
@@ -293,7 +348,7 @@ select:-webkit-autofill:focus {
   font-size: small;
 }
 
-.add-todo {
+.add-button {
   cursor: pointer;
   background-color: rgb(0, 255, 0);
   color: black;
@@ -301,7 +356,7 @@ select:-webkit-autofill:focus {
   margin: 16px;
   display: flex;
   flex-direction: row;
-  align-items: baseline;
+  align-items: center;
   transition: ease-in-out;
   transition-duration: 500ms;
   border-radius: 8px;
@@ -309,15 +364,54 @@ select:-webkit-autofill:focus {
   box-shadow: 0px 0px 5px 1px rgb(0, 255, 0);
 }
 
+.rotate {
+  transition: transform 0.5s ease-in-out;
+}
+.rotate:hover {
+  transform: rotate(360deg);
+}
+
 .add-icon {
   height: 24px;
   align-self: center;
 }
 
-.add-todo-input {
+.add-item-input {
   background: transparent;
   color: black;
   align-self: center;
   padding: 0;
   margin: 2px;
+}
+.overflow-hidden {
+  overflow: hidden;
+}
+.overflow-y-scroll {
+  overflow-y: auto;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #000000;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #00ff00;
+  border-radius: 50px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #00ff00;
+  box-shadow: 0px 0px 5px 1px rgb(0, 255, 0);
+}
+
+.h-half {
+  height: 50%;
 }

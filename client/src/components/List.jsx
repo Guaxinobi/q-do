@@ -1,18 +1,40 @@
 import { useState } from "react/cjs/react.development";
-import { useTodo } from "../context/todo";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import ReactLoading from "react-loading";
 import { useEffect } from "react";
+import { PencilAltIcon } from "@heroicons/react/outline";
+import { XIcon } from "@heroicons/react/solid";
 
-export const Component = () => {
-  const [editTodoText, setEditTodoText] = useState(false);
-  const [todoText, setTodoText] = useState("");
-  const [currentIndex, setCurrentIndex] = useState(null);
-  const { currentList, setCurrentList } = useTodo();
-  const toggleEditTodoText = (txt, index) => {
-    setEditTodoText(!editTodoText);
-    setCurrentIndex(index);
-    setTodoText(txt);
+export const Component = ({
+  list,
+  setList,
+  isTodo,
+  updateItem,
+  deleteItem,
+}) => {
+  const [editItemText, setEditItemText] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(-1);
+  const [currentText, setCurrentText] = useState("");
+
+  const toggleEditItemText = (e, index, id, title) => {
+    e.preventDefault();
+    if (editItemText) {
+      updateItem(id, currentText).then((res) => {
+        setEditItemText(false);
+        setCurrentIndex(null);
+      });
+    } else {
+      setCurrentText(title);
+      setEditItemText(true);
+      setCurrentIndex(index);
+    }
+  };
+
+  useEffect(() => {}, [currentText]);
+
+  const handleDelete = (e, id) => {
+    e.preventDefault();
+    deleteItem(id);
   };
 
   const reorder = (list, startIndex, endIndex) => {
@@ -30,22 +52,18 @@ export const Component = () => {
     if (result.destination.index === result.source.index) {
       return;
     }
-    console.log("currentList: ", currentList);
-    let tempList = currentList;
+    console.log("list: ", list);
+    let tempList = list;
 
     console.log("tempList: ", tempList);
-    tempList.todos = reorder(
-      tempList.todos,
-      result.source.index,
-      result.destination.index
-    );
+    tempList = reorder(tempList, result.source.index, result.destination.index);
 
-    setCurrentList(tempList);
+    setList(tempList);
   };
 
-  useEffect(() => {}, [currentList]);
+  useEffect(() => {}, [list]);
 
-  if (!currentList) {
+  if (!list) {
     return (
       <div>
         LOADING
@@ -54,50 +72,76 @@ export const Component = () => {
     );
   } else {
     return (
-      <div>
+      <div className=" h-full">
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId="uncompleted-list" className="todo-list">
             {(provided) => (
               <div ref={provided.innerRef} {...provided.droppableProps}>
-                {currentList.todos.map((todo, index) => {
-                  console.log("item ", index, ": ", todo);
+                {list.map((item, index) => {
+                  console.log("item ", index, ": ", item);
                   return (
                     <Draggable
-                      key={todo.id}
+                      key={item.id}
                       index={index}
-                      draggableId={`id-${todo.id}`}
+                      draggableId={`id-${item.id}`}
                     >
                       {(provided) => (
                         <div
-                          className="todo"
+                          className="todo justify-between"
                           key={index}
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
                         >
-                          <div className="checkbox">
-                            <input type="checkbox" id={`todo-${index}`} />
+                          <div>
+                            {isTodo && (
+                              <div className="checkbox">
+                                <input type="checkbox" id={`item-${index}`} />
+                              </div>
+                            )}
+                            {currentIndex !== index && (
+                              <label
+                                htmlFor={`item-${index}`}
+                                className="item-text"
+                              >
+                                {item.title}
+                              </label>
+                            )}
+                            <form
+                              onSubmit={(e) => {
+                                toggleEditItemText(
+                                  e,
+                                  index,
+                                  item.id,
+                                  item.title
+                                );
+                              }}
+                            >
+                              <input
+                                hidden={index !== currentIndex || !editItemText}
+                                value={currentText}
+                                onChange={(e) => setCurrentText(e.target.value)}
+                              />
+                            </form>
                           </div>
-                          <label
-                            htmlFor={`todo-${index}`}
-                            hidden={editTodoText && index === currentIndex}
-                            onClick={() => toggleEditTodoText(todo.text, index)}
-                            className="todo-text"
-                          >
-                            {todo.text}
-                          </label>
-                          <form
-                            onSubmit={(e) => {
-                              e.preventDefault();
-                              setCurrentIndex(null);
-                              setEditTodoText(false);
-                            }}
-                          >
-                            <input
-                              hidden={index !== currentIndex || !editTodoText}
-                              value={todo.text}
+                          <div className="flex">
+                            {" "}
+                            <PencilAltIcon
+                              onClick={(e) =>
+                                toggleEditItemText(
+                                  e,
+                                  index,
+                                  item.id,
+                                  item.title
+                                )
+                              }
+                              className="pencil-icon"
                             />
-                          </form>
+                            <XIcon
+                              onClick={(e) => handleDelete(e, item.id)}
+                              className="x-icon"
+                            />
+                          </div>
                         </div>
                       )}
                     </Draggable>
