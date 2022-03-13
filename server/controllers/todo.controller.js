@@ -3,7 +3,6 @@ const { list: List, todo: Todo } = db;
 const jwt = require("jsonwebtoken");
 
 exports.getAllTodos = async (req, res) => {
-  console.log(req.body);
   let todos = await Todo.findAll({
     where: { listId: req.body.listId, archived: false },
   });
