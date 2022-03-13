@@ -1,0 +1,323 @@
+body {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  margin: 0;
+  padding: 0;
+  color: rgb(0, 255, 0);
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: rgb(17, 17, 17);
+}
+
+.App {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
+
+.shell {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  background-color: rgb(17, 17, 17);
+  border: 4px red;
+  width: 100vw;
+  height: 100vh;
+}
+
+.wrapper {
+  padding-top: 24px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+  z-index: 2;
+}
+
+.side-nav {
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border: 2px yellow;
+  align-items: center;
+  background-color: black;
+  width: 300px;
+  height: 100vh;
+  box-shadow: 0px 0px 10px 0px rgb(0, 255, 0);
+  transition: ease-in-out;
+  transition-duration: 500ms;
+  justify-content: space-between;
+}
+
+.side-nav-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-items: center;
+}
+
+.side-nav-bottom {
+  display: flex;
+  flex-direction: column;
+  justify-items: ends;
+  justify-content: end;
+}
+
+.closed {
+  width: 0 !important;
+  overflow: hidden;
+}
+
+.logo {
+  color: rgb(17, 17, 17);
+  font-weight: bold;
+  text-align: center;
+  padding: 20px;
+  width: 100%;
+  text-shadow: 0px 0px 10px rgb(0, 255, 0);
+  text-overflow: clip;
+  white-space: nowrap;
+  overflow: hidden;
+  font-size: 64px;
+  margin: 8px;
+  transition: 500ms;
+}
+
+.logo:hover {
+  text-shadow: 0px 5px 10px rgb(0, 255, 0);
+  transform: translateY(-5px);
+}
+.user-icon {
+  overflow: hidden;
+  height: px;
+  width: 96px;
+  border-radius: 50%;
+  background: rgb(17, 17, 17);
+}
+
+.main-page {
+  height: 100%;
+  position: realative;
+  display: flex;
+  flex-direction: column;
+}
+
+.login-page {
+  position: relative;
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-container {
+  min-width: 200px;
+  border-radius: 8px;
+  background-color: black;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+}
+
+.items-center {
+  justify-content: center;
+  text-align: center;
+}
+
+button {
+  margin-top: 8px;
+  margin-bottom: 8px;
+  outline: none;
+  border: none;
+  background-color: rgb(17, 17, 17);
+  color: rgb(0, 255, 0);
+  padding: 4px;
+
+  transition: easel;
+  transition-duration: 500ms;
+}
+
+button:hover {
+  cursor: pointer;
+  /*background: linear-gradient(
+    180deg,
+    rgba(17, 17, 17, 1),
+    rgb(0, 255, 0, 0.2) 90%
+  );*/
+}
+
+label {
+  margin-bottom: 4px;
+}
+input {
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 1),
+    rgb(0, 255, 0, 0.2) 90%,
+    rgb(0, 255, 0, 1)
+  );
+  color: rgb(0, 255, 0);
+  border: none;
+  border-bottom: rgb(0, 255, 0) 1px;
+  outline: rgb(0, 255, 0);
+  padding: 4px;
+  margin-bottom: 8px;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  -webkit-text-fill-color: rgb(0, 255, 0);
+
+  transition: background-color 5000000s ease-in-out 0s;
+}
+
+.todo-list {
+  display: flex;
+  flex-direction: column;
+  margin: 8px;
+}
+
+.todo {
+  cursor: pointer;
+  background-color: rgb(0, 0, 0);
+  padding: 8px;
+  margin: 16px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  transition: ease-in-out;
+  transition-duration: 500ms;
+  border-radius: 8px;
+  transition-duration: 500ms;
+  box-shadow: 0px 0px 5px 1px rgb(0, 255, 0);
+}
+.todo:hover {
+  box-shadow: 0px 5px 3px 0px rgb(0, 255, 0);
+  transform: translateY(-8px);
+}
+
+.checkbox:checked {
+  text-decoration: line-through;
+}
+
+.checkbox {
+  margin-right: 4px;
+}
+
+.done {
+  text-decoration: line-through;
+}
+
+.user-icon {
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0px 0px 10px 0px rgb(0, 255, 0);
+  margin-top: 16px;
+  position: relative;
+  transition: ease-in-out;
+  transition-duration: 500ms;
+}
+
+.user-icon:hover {
+  box-shadow: 0px 10px 10px 0px rgb(0, 255, 0);
+  transform: translateY(-8px);
+}
+
+.todo-text {
+  cursor: auto;
+}
+
+.open-sidebar {
+  padding: 0;
+  margin: 0;
+  position: relative;
+  height: 40px;
+  width: 40px;
+}
+
+.toggle-sidebar {
+  padding: 0;
+  height: 48px;
+  width: 48px;
+  margin: 25px;
+  border-radius: 50%;
+  background-color: black;
+  transition: ease-in-out;
+  transition-duration: 500ms;
+  box-shadow: 0px 0px 5px 1px rgb(0, 255, 0);
+}
+.toggle-sidebar:hover {
+  box-shadow: 0px 5px 5px 0px rgb(0, 255, 0);
+
+  transform: translateY(-8px);
+}
+
+.rotate-right {
+  transition-duration: 500ms;
+  transform: rotate(-180deg);
+}
+
+.rotate-left {
+  transition-duration: 500ms;
+  transform: rotate(0deg);
+}
+
+.list-item {
+  color: rgb(0, 255, 0);
+  background-color: white;
+}
+
+.link {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.text-sm {
+  font-size: small;
+}
+
+.add-todo {
+  cursor: pointer;
+  background-color: rgb(0, 255, 0);
+  color: black;
+  padding: 8px;
+  margin: 16px;
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  transition: ease-in-out;
+  transition-duration: 500ms;
+  border-radius: 8px;
+  transition-duration: 500ms;
+  box-shadow: 0px 0px 5px 1px rgb(0, 255, 0);
+}
+
+.add-icon {
+  height: 24px;
+  align-self: center;
+}
+
+.add-todo-input {
+  background: transparent;
+  color: black;
+  align-self: center;
+  padding: 0;
+  margin: 2px;
+}
