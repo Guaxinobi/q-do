@@ -12,7 +12,15 @@ export const Layout = ({ children }) => {
   const [showSideBar, setShowSideBar] = useState(true);
   const [title, setTitle] = useState("new list");
   const { logout, user } = useAuth();
-  const { lists, setLists, newList, updateList, deleteList } = useList();
+  const {
+    lists,
+    setLists,
+    newList,
+    updateList,
+    deleteList,
+    setCurrentList,
+    currentList,
+  } = useList();
   let navigate = useNavigate();
   const toggleSideBar = () => {
     setShowSideBar(!showSideBar);
@@ -36,7 +44,7 @@ export const Layout = ({ children }) => {
     }
   }, [showSideBar, user]);
 
-  useEffect(() => {}, [title]);
+  useEffect(() => {}, [title, currentList, lists]);
 
   return (
     <div className="shell overflow-hidden">
@@ -74,6 +82,8 @@ export const Layout = ({ children }) => {
               setList={setLists}
               updateItem={updateList}
               deleteItem={deleteList}
+              setCurrentItem={setCurrentList}
+              currentItem={currentList}
               className=""
             />
           </div>

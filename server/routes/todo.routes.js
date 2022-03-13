@@ -1,5 +1,5 @@
-const { verifySignUp } = require("../middleware");
-const controller = require("../controllers/auth.controller");
+const controller = require("../controllers/todo.controller");
+
 module.exports = function (app) {
   app.use((req, res, next) => {
     res.header(
@@ -8,16 +8,12 @@ module.exports = function (app) {
     );
     next();
   });
-  app.post(
-    "/api/auth/signup",
-    verifySignUp.checkDuplicateEmail,
-    controller.signup
-  );
-  app.post(
-    "/api/auth/signin",
 
-    controller.signin
-  );
+  app.post("/api/todo/getall", controller.getAllTodos);
+  app.post("/api/todo/newtodo", controller.newTodo);
+  app.post("/api/todo/updatetodo", controller.updateTodo);
+  app.post("/api/todo/archivetodo", controller.archiveTodo);
+  app.post("/api/todo/checktodo", controller.checkTodo);
   // app.post("/api/auth/signin", controller.signin);
   // app.post("/api/auth/refreshtoken", controller.refreshToken);
 };

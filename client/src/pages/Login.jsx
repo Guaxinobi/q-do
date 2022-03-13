@@ -51,7 +51,7 @@ export const Page = () => {
           </span>
         </div>
         <div className="items-center">
-          <h5>Login</h5>
+          <h2>Login</h2>
         </div>
         <div className="flex-col">
           <form className="flex-col" onSubmit={(e) => handleLogin(e)}>

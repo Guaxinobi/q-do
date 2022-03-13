@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/auth";
 import ReactLoading from "react-loading";
+import { useNavigate } from "react-router-dom";
 
 export const Page = () => {
+  let navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -41,7 +43,7 @@ export const Page = () => {
       <div className="flex login-page ">
         <div className="login-container flex-grow">
           <div className="items-center">
-            <h1>Q-Do</h1>
+            <h1 className="logo">Q-Do</h1>
           </div>
           <div className="items-center">
             <h2>Registration</h2>
@@ -87,6 +89,12 @@ export const Page = () => {
               >
                 Sign Up
               </button>
+              <span className="text-lg">
+                Back to{" "}
+                <span className="link" onClick={() => navigate("/")}>
+                  Login
+                </span>
+              </span>
             </form>
           </div>
         </div>

@@ -11,6 +11,8 @@ export const Component = ({
   isTodo,
   updateItem,
   deleteItem,
+  currentItem,
+  setCurrentItem,
 }) => {
   const [editItemText, setEditItemText] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(-1);
@@ -28,6 +30,13 @@ export const Component = ({
       setEditItemText(true);
       setCurrentIndex(index);
     }
+  };
+
+  const handleClickOnItem = (e, item) => {
+    console.log("handleclickonitem");
+    e.preventDefault();
+    if (isTodo) return;
+    setCurrentItem(item);
   };
 
   useEffect(() => {}, [currentText]);
@@ -62,14 +71,12 @@ export const Component = ({
   };
 
   useEffect(() => {}, [list]);
+  useEffect(() => {
+    console.log("CURRENTITEM: ", currentItem);
+  }, [currentItem]);
 
-  if (!list) {
-    return (
-      <div>
-        LOADING
-        <ReactLoading type="spinningBubbles" color="#00ff00" />
-      </div>
-    );
+  if (!list.length) {
+    return <div>No list available</div>;
   } else {
     return (
       <div className=" h-full">
@@ -78,7 +85,6 @@ export const Component = ({
             {(provided) => (
               <div ref={provided.innerRef} {...provided.droppableProps}>
                 {list.map((item, index) => {
-                  console.log("item ", index, ": ", item);
                   return (
                     <Draggable
                       key={item.id}
@@ -87,26 +93,35 @@ export const Component = ({
                     >
                       {(provided) => (
                         <div
-                          className="todo justify-between"
+                          onClick={(e) => {
+                            handleClickOnItem(e, item);
+                          }}
+                          className={`todo justify-between ${
+                            item.id === currentItem?.id && !isTodo
+                              ? ` active-list `
+                              : ` `
+                          }`}
                           key={index}
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
                         >
                           <div>
-                            {isTodo && (
-                              <div className="checkbox">
-                                <input type="checkbox" id={`item-${index}`} />
-                              </div>
-                            )}
-                            {currentIndex !== index && (
-                              <label
-                                htmlFor={`item-${index}`}
-                                className="item-text"
-                              >
-                                {item.title}
-                              </label>
-                            )}
+                            <div className="flex">
+                              {isTodo && (
+                                <div className="checkbox">
+                                  <input type="checkbox" id={`item-${index}`} />
+                                </div>
+                              )}
+                              {currentIndex !== index && (
+                                <label
+                                  htmlFor={`item-${index}`}
+                                  className="item-text"
+                                >
+                                  {item.title}
+                                </label>
+                              )}
+                            </div>
                             <form
                               onSubmit={(e) => {
                                 toggleEditItemText(
