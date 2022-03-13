@@ -3,6 +3,7 @@ const config = require("../config/auth.config");
 const { user: User, refreshToken: RefreshToken } = db;
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const req = require("express/lib/request");
 
 exports.signup = (req, res) => {
   // Save User to Database
@@ -56,6 +57,7 @@ exports.signin = (req, res) => {
       res.status(500).send({ message: err.message });
     });
 };
+
 exports.refreshToken = async (req, res) => {
   const { refreshToken: requestToken } = req.body;
   if (requestToken == null) {
@@ -79,12 +81,16 @@ exports.refreshToken = async (req, res) => {
       return;
     }
     const user = await refreshToken.getUser();
+    console.log("###################USER: ", user);
     let newAccessToken = jwt.sign({ id: user.id }, config.secret, {
       expiresIn: config.jwtExpiration,
     });
     return res.status(200).json({
+      id: user.id,
+      username: user.username,
+      email: user.email,
       accessToken: newAccessToken,
-      refreshToken: refreshToken.token,
+      refreshToken: refreshToken,
     });
   } catch (err) {
     return res.status(500).send({ message: err });
@@ -100,4 +106,42 @@ exports.logout = async (req, res) => {
   res
     .status(200)
     .json({ success: true, message: "User logged out successfully" });
+};
+
+exports.changePassword = async (req, res) => {
+  let user = User.findOne({
+    where: {
+      id: req.body.userId,
+      password: bcrypt.hashSync(req.body.oldPassword, 8),
+    },
+  });
+  if (!user)
+    return res
+      .status(404)
+      .send({ message: "User not found or password invalid" });
+  let editedUser = await User.update(
+    { password: bcrypt.hashSync(req.body.newPassword, 8) },
+    { where: { id: req.body.userid } }
+  );
+
+  res.status(200).send({
+    editedUser,
+  });
+};
+
+exports.updateUser = async (req, res) => {
+  let user = await User.findOne({ where: { id: req.body.userId } });
+  if (!user) {
+    return res.status(404).send({ message: "User Not found." });
+  }
+  let editedUser = await User.update(
+    { username: req.body.username },
+    { where: { id: user.id } }
+  );
+  if (!editedUser)
+    return res.status(500).send({ message: "User data not edited." });
+
+  res.status(200).send({
+    editedUser,
+  });
 };

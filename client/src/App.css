@@ -68,12 +68,8 @@ body {
 }
 
 .side-nav-bottom {
-  position: absolute;
   bottom: 0;
-  display: flex;
-  flex-direction: row;
-  justify-items: ends;
-  justify-content: end;
+  padding: 10px;
 }
 
 .closed {
@@ -94,6 +90,8 @@ body {
   margin: 8px;
   transition: 500ms;
   cursor: default;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif, sans-serif,
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 }
 
 .logo:hover {
@@ -145,18 +143,11 @@ body {
   margin-right: 4px;
 }
 .logout-button {
-  border-radius: 8px;
-  padding: 8px;
   display: flex;
   align-items: center;
-  box-shadow: 0px 0px 10px 0px rgb(0, 255, 0);
-  transition: ease-in-out;
-  transition-duration: 500ms;
-}
-
-.logout-button:hover {
-  box-shadow: 0px 10px 10px 0px rgb(0, 255, 0);
-  transform: translateY(-8px);
+  text-align: center;
+  margin: 16px;
+  justify-content: center;
 }
 
 .flex {
@@ -169,6 +160,9 @@ body {
 
 .justify-between {
   justify-content: space-between;
+}
+.justify-center {
+  justify-content: center;
 }
 
 .login-container {
@@ -188,20 +182,27 @@ body {
 }
 
 button {
-  margin-top: 8px;
-  margin-bottom: 8px;
+  margin: 8px 0 8px 0;
+  position: relative;
   outline: none;
   border: none;
   background-color: rgb(17, 17, 17);
   color: rgb(0, 255, 0);
-  padding: 4px;
   font-family: monospace;
   transition: easel;
   transition-duration: 500ms;
+  border-radius: 8px;
+  padding: 8px;
+  box-shadow: 0px 0px 10px 0px rgb(0, 255, 0);
+  transition: ease-in-out;
+  transition-duration: 300ms;
 }
 
 button:hover {
+  bottom: 2px;
   cursor: pointer;
+  box-shadow: 0px 5px 5px 0px rgb(0, 255, 0);
+  transform: translateY(-2px);
   /*background: linear-gradient(
     180deg,
     rgba(17, 17, 17, 1),
@@ -348,6 +349,10 @@ select:-webkit-autofill:focus {
   font-size: small;
 }
 
+.text-lg {
+  font-size: large;
+}
+
 .add-button {
   cursor: pointer;
   background-color: rgb(0, 255, 0);
@@ -414,4 +419,14 @@ select:-webkit-autofill:focus {
 
 .h-half {
   height: 50%;
+}
+
+.greeting {
+  font-size: large;
+  margin: 8px;
+}
+.profile {
+  width: 90%;
+  text-overflow: clip;
+  margin: 8px;
 }

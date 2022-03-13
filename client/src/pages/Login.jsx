@@ -55,28 +55,34 @@ export const Page = () => {
         </div>
         <div className="flex-col">
           <form className="flex-col" onSubmit={(e) => handleLogin(e)}>
-            <label>E-Mail</label>
-            <input
-              name="email"
-              type="text"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <label>Password</label>
-            <input
-              name="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              type="password"
-            />
-            {isWrong && <span>Wrong email/password combination</span>}
-            {isEmpty && <span>No empty fields allowed.</span>}
-
-            <button type="submit" className="button">
-              Sign in
-            </button>
+            <div className="flex-col justify-between">
+              <label>E-Mail</label>
+              <input
+                name="email"
+                type="text"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <label>Password</label>
+              <input
+                name="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                type="password"
+              />
+              {isWrong && <span>Wrong email/password combination</span>}
+              {isEmpty && <span>No empty fields allowed.</span>}
+            </div>
+            <div className="flex jusitfy-center w-full">
+              <div>
+                {" "}
+                <button type="submit" className="button ">
+                  Sign in
+                </button>
+              </div>
+            </div>
           </form>
-          <span className="text-sm">
+          <span className="text-lg">
             i want to{" "}
             <span className="link" onClick={() => navigate("/signup")}>
               sign up

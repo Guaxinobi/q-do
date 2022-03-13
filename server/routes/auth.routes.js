@@ -17,6 +17,12 @@ module.exports = function (app) {
 
   app.get("/api/auth/logout", controller.logout);
 
+  app.post("/api/auth/update", controller.updateUser);
+
+  app.post("/api/auth/changepassword", controller.changePassword);
+
+  app.post("/api/auth/refreshToken", controller.refreshToken);
+
   // app.post("/api/auth/signin", controller.signin);
   // app.post("/api/auth/refreshtoken", controller.refreshToken);
 };

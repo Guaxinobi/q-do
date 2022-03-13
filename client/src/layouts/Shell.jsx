@@ -5,7 +5,7 @@ import { useState } from "react/cjs/react.development";
 import { useAuth } from "../context/auth";
 import { useNavigate } from "react-router-dom";
 import { useList } from "../context/list";
-import { List, NewItem } from "../components";
+import { List, NewItem, Profile } from "../components";
 
 export const Layout = ({ children }) => {
   const [openProfile, setOpenProfile] = useState(false);
@@ -42,17 +42,25 @@ export const Layout = ({ children }) => {
     <div className="shell overflow-hidden">
       <div
         className={
-          `side-nav overflow-hidden relative` +
+          `side-nav overflow-hidden relative flex-col` +
           (showSideBar ? `  ` : ` closed `)
         }
       >
-        <div className="w-full overflow-hidden flex flex-col">
-          <div className={`side-nav-head`}>
+        <div className="w-full overflow-hidden flex flex-col relative">
+          <div className={`side-nav-head w-full relative`}>
             <div className="logo">Q-DO</div>
-            <div className="user-icon">
+            <div
+              className="user-icon"
+              onClick={() => setOpenProfile(!openProfile)}
+            >
               <UserIcon className="icon" />
             </div>
-            <span>Hello, {user.username}</span>
+            <span className="greeting">Hello, {user.username}</span>
+            {openProfile && (
+              <div className="profile show ">
+                <Profile />
+              </div>
+            )}
           </div>
 
           <NewItem
@@ -70,10 +78,10 @@ export const Layout = ({ children }) => {
             />
           </div>
         </div>
-        <div className="sive-nav-bottom">
+        <div className="flex  flex-col w-full relative">
           <button onClick={(e) => handleLogout(e)} className="logout-button">
             <LogoutIcon className="logout-icon" />
-            Logout
+            <div>Logout</div>
           </button>
         </div>
       </div>

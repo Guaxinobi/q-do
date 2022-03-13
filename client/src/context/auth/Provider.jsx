@@ -8,11 +8,11 @@ export const Provider = ({ children }) => {
 
   const [user, setUser] = useState();
 
-  const API_URL = "http://localhost:3001/api/auth";
+  const API_URL = "http://localhost:3001/api/auth/";
 
   const signUpUser = (name, email, password) => {
     return axios
-      .post(API_URL + "/signup", {
+      .post(API_URL + "signup", {
         name: name,
         email: email,
         password: password,
@@ -25,12 +25,13 @@ export const Provider = ({ children }) => {
 
   const signInUser = (email, password) => {
     return axios
-      .post(API_URL + "/signin", {
+      .post(API_URL + "signin", {
         email: email,
         password: password,
       })
       .then((res) => {
         if (res.data.accessToken) {
+          console.log("updateuserresponse ", res.data);
           localStorage.setItem("user", JSON.stringify(res.data));
         }
         getCurrentUser();
@@ -45,8 +46,22 @@ export const Provider = ({ children }) => {
   };
 
   const getCurrentUser = () => {
-    console.log("getCurrentUser");
+    console.log("getCurrentUser: ", localStorage.getItem("user"));
     setUser(JSON.parse(localStorage.getItem("user")));
+  };
+
+  const refreshToken = () => {
+    return axios
+      .post(API_URL + "refreshToken", { refreshToken: user.refreshToken.token })
+      .then((res) => {
+        console.log("REFRESH: ", res);
+        if (res.data.accessToken) {
+          console.log("updateuserresponse ", res.data);
+          localStorage.setItem("user", JSON.stringify(res.data));
+        }
+        getCurrentUser();
+        return res.data;
+      });
   };
 
   const authHeader = () => {
@@ -75,6 +90,7 @@ export const Provider = ({ children }) => {
     user: user,
     getCurrentUser: getCurrentUser,
     authHeader: authHeader,
+    refreshToken: refreshToken,
   };
 
   return <Context.Provider value={contextValue}>{children}</Context.Provider>;

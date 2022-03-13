@@ -5,28 +5,37 @@ import axios from "axios";
 import { useAuth } from "../auth";
 
 export const Provider = ({ children }) => {
-  const { authHeader } = useAuth();
-  const API_URL = "http://localhost:3001/api/user/";
-  const [allLists, setAllLists] = useState([]);
+  const { authHeader, user, getCurrentUser, refreshToken } = useAuth();
+  const API_URL = "http://localhost:3001/api/auth/";
 
-  const getAllLists = () => {
-    return axios.get(API_URL + "lists", { headers: authHeader() });
+  const updateUser = (username, email) => {
+    return axios
+      .post(API_URL + "update", {
+        userId: user.id,
+        username: username,
+      })
+      .then((res, err) => {
+        refreshToken();
+      })
+      .catch((err) => {});
   };
 
-  const createList = () => {
-    return axios.post(API_URL + "newlist", { headers: authHeader() });
-  };
-
-  const deleteList = () => {
-    return axios.post(API_URL + "deletelist", { headers: authHeader() });
-  };
-
-  const updateList = () => {
-    return axios.post(API_URL + "updateList", { headers: authHeader() });
+  const changePassword = (oldPassword, newPassword) => {
+    return axios
+      .post(API_URL + "changepassword", {
+        userId: user.id,
+        oldPassword: oldPassword,
+        newPassword: newPasword,
+      })
+      .then((res) => {
+        refreshToken();
+      })
+      .catch((err) => console.log(err));
   };
 
   const contextValue = {
-    getAllLists: getAllLists,
+    updateUser: updateUser,
+    changePassword: changePassword,
   };
 
   return <Context.Provider value={contextValue}>{children}</Context.Provider>;
