@@ -1,5 +1,5 @@
 import { ChevronLeftIcon, LogoutIcon } from "@heroicons/react/outline";
-import { PlusIcon, UserIcon } from "@heroicons/react/solid";
+import { UserIcon } from "@heroicons/react/solid";
 import { useEffect } from "react";
 import { useState } from "react/cjs/react.development";
 import { useAuth } from "../context/auth";
@@ -84,7 +84,6 @@ export const Layout = ({ children }) => {
               deleteItem={deleteList}
               setCurrentItem={setCurrentList}
               currentItem={currentList}
-              className=""
             />
           </div>
         </div>

@@ -13,6 +13,7 @@ export const Component = ({
   deleteItem,
   currentItem,
   setCurrentItem,
+  checkItem,
 }) => {
   const [editItemText, setEditItemText] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(-1);
@@ -24,6 +25,7 @@ export const Component = ({
       updateItem(id, currentText).then((res) => {
         setEditItemText(false);
         setCurrentIndex(null);
+        setCurrentText("");
       });
     } else {
       setCurrentText(title);
@@ -39,7 +41,12 @@ export const Component = ({
     setCurrentItem(item);
   };
 
-  useEffect(() => {}, [currentText]);
+  const handleCheck = (e, id, checked) => {
+    e.preventDefault();
+    checkItem(id, checked);
+  };
+
+  useEffect(() => {}, [currentText, setEditItemText]);
 
   const handleDelete = (e, id) => {
     e.preventDefault();
@@ -98,7 +105,7 @@ export const Component = ({
                           }}
                           className={`todo justify-between ${
                             item.id === currentItem?.id && !isTodo
-                              ? ` active-list `
+                              ? ` active-item `
                               : ` `
                           }`}
                           key={index}
@@ -107,11 +114,24 @@ export const Component = ({
                           {...provided.dragHandleProps}
                         >
                           <div>
-                            <div className="flex">
+                            <div className="flex align-center">
                               {isTodo && (
-                                <div className="checkbox">
-                                  <input type="checkbox" id={`item-${index}`} />
-                                </div>
+                                <label className="checkbox-container">
+                                  <input
+                                    type="checkbox"
+                                    checked={item.checked}
+                                    onChange={(e) => {
+                                      handleCheck(e, item.id, item.checked);
+                                    }}
+                                    id={`item-${index}`}
+                                  />
+                                  <span
+                                    onClick={(e) => {
+                                      handleCheck(e, item.id, item.checked);
+                                    }}
+                                    className="checkmark"
+                                  ></span>
+                                </label>
                               )}
                               {currentIndex !== index && (
                                 <label
@@ -121,26 +141,27 @@ export const Component = ({
                                   {item.title}
                                 </label>
                               )}
-                            </div>
-                            <form
-                              onSubmit={(e) => {
-                                toggleEditItemText(
-                                  e,
-                                  index,
-                                  item.id,
-                                  item.title
-                                );
-                              }}
-                            >
-                              <input
+                              <form
                                 hidden={index !== currentIndex || !editItemText}
-                                value={currentText}
-                                onChange={(e) => setCurrentText(e.target.value)}
-                              />
-                            </form>
+                                onSubmit={(e) => {
+                                  toggleEditItemText(
+                                    e,
+                                    index,
+                                    item.id,
+                                    item.title
+                                  );
+                                }}
+                              >
+                                <input
+                                  value={currentText}
+                                  onChange={(e) =>
+                                    setCurrentText(e.target.value)
+                                  }
+                                />
+                              </form>
+                            </div>
                           </div>
                           <div className="flex">
-                            {" "}
                             <PencilAltIcon
                               onClick={(e) =>
                                 toggleEditItemText(

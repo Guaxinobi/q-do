@@ -42,7 +42,8 @@ export const Component = () => {
 
   useEffect(() => {
     console.log("USERPROFILE: ", user);
-  }, [user]);
+  }, [user, isOldPasswordWrong, passwordTooShort]);
+
   return (
     <div className="w-full ">
       <div>

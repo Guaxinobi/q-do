@@ -78,7 +78,7 @@ exports.checkTodo = async (req, res) => {
   }
   let todo = Todo.update(
     {
-      checked: true,
+      checked: !req.body.checked,
     },
     { where: { id: req.body.todoId } }
   );

@@ -121,8 +121,11 @@ exports.changePassword = async (req, res) => {
       .send({ message: "User not found or password invalid" });
   let editedUser = await User.update(
     { password: bcrypt.hashSync(req.body.newPassword, 8) },
-    { where: { id: req.body.userid } }
+    { where: { id: req.body.userId } }
   );
+
+  if (!editedUser)
+    return res.status(500).send({ message: "Password not changed." });
 
   res.status(200).send({
     editedUser,

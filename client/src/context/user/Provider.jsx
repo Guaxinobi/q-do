@@ -25,7 +25,7 @@ export const Provider = ({ children }) => {
       .post(API_URL + "changepassword", {
         userId: user.id,
         oldPassword: oldPassword,
-        newPassword: newPasword,
+        newPassword: newPassword,
       })
       .then((res) => {
         refreshToken();

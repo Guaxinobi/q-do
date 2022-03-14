@@ -28,7 +28,7 @@ export const Provider = ({ children }) => {
       })
       .catch((err) => console.log(err));
   };
-  const updateTodo = (title, todoId) => {
+  const updateTodo = (todoId, title) => {
     return axios
       .post(API_URL + "updatetodo", {
         listId: currentList.id,
@@ -50,7 +50,7 @@ export const Provider = ({ children }) => {
   };
   const checkTodo = (todoId, checked) => {
     return axios
-      .post(API_URL + "getall", {
+      .post(API_URL + "checktodo", {
         listId: currentList.id,
         todoId: todoId,
         checked: checked,
@@ -76,7 +76,7 @@ export const Provider = ({ children }) => {
     setTodos: setTodos,
     getAll: getAll,
     newTodo: newTodo,
-    updateTdo: updateTodo,
+    updateTodo: updateTodo,
     archiveTodo: archiveTodo,
     checkTodo: checkTodo,
   };
