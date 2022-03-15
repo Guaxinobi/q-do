@@ -52,7 +52,11 @@ export const Provider = ({ children }) => {
 
   const refreshToken = () => {
     return axios
-      .post(API_URL + "refreshToken", { refreshToken: user.refreshToken.token })
+      .post(
+        API_URL + "refreshToken",
+        { refreshToken: user.refreshToken.token },
+        { headers: authHeader() }
+      )
       .then((res) => {
         console.log("REFRESH: ", res);
         if (res.data.accessToken) {

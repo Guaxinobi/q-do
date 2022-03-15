@@ -1,18 +1,23 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useAuth } from "../auth";
 import { useList } from "../list";
 import { Context } from "./Context";
 
 export const Provider = ({ children }) => {
   const API_URL = "http://localhost:3001/api/todo/";
   const { currentList } = useList();
+  const { authHeader } = useAuth();
   const [todos, setTodos] = useState([]);
 
   const getAll = () => {
-    console.log("GETALL: ", currentList);
     if (!currentList.id) return;
     return axios
-      .post(API_URL + "getall", { listId: currentList.id })
+      .post(
+        API_URL + "getall",
+        { listId: currentList.id },
+        { headers: authHeader() }
+      )
       .then((res) => {
         console.log("TODOS: ", res);
         setTodos([...res.data]);
@@ -21,7 +26,14 @@ export const Provider = ({ children }) => {
   };
   const newTodo = (title) => {
     return axios
-      .post(API_URL + "newtodo", { listId: currentList.id, title: title })
+      .post(
+        API_URL + "newtodo",
+        {
+          listId: currentList.id,
+          title: title,
+        },
+        { headers: authHeader() }
+      )
       .then((res) => {
         console.log("NEW TODO!!!");
         getAll();
@@ -30,11 +42,15 @@ export const Provider = ({ children }) => {
   };
   const updateTodo = (todoId, title) => {
     return axios
-      .post(API_URL + "updatetodo", {
-        listId: currentList.id,
-        title: title,
-        todoId: todoId,
-      })
+      .post(
+        API_URL + "updatetodo",
+        {
+          listId: currentList.id,
+          title: title,
+          todoId: todoId,
+        },
+        { headers: authHeader() }
+      )
       .then((res) => {
         getAll();
       })
@@ -42,7 +58,14 @@ export const Provider = ({ children }) => {
   };
   const archiveTodo = (todoId) => {
     return axios
-      .post(API_URL + "archivetodo", { listId: currentList.id, todoId: todoId })
+      .post(
+        API_URL + "archivetodo",
+        {
+          listId: currentList.id,
+          todoId: todoId,
+        },
+        { headers: authHeader() }
+      )
       .then((res) => {
         getAll();
       })
@@ -50,11 +73,15 @@ export const Provider = ({ children }) => {
   };
   const checkTodo = (todoId, checked) => {
     return axios
-      .post(API_URL + "checktodo", {
-        listId: currentList.id,
-        todoId: todoId,
-        checked: checked,
-      })
+      .post(
+        API_URL + "checktodo",
+        {
+          listId: currentList.id,
+          todoId: todoId,
+          checked: checked,
+        },
+        { headers: authHeader() }
+      )
       .then((res) => {
         getAll();
       })

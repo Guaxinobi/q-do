@@ -9,7 +9,7 @@ import {
 } from "react-router-dom";
 import { LoginPage, MainPage, RegistrationPage } from "./pages";
 import { AuthProvider, useAuth } from "./context/auth";
-import { Layout } from "./layouts/Shell";
+import { Layout } from "./layouts/Layout";
 import { UserProvider } from "./context/user";
 import { TodosProvider } from "./context/todo";
 import { ListsProvider } from "./context/list";

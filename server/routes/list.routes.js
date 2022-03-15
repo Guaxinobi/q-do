@@ -1,5 +1,5 @@
 const controller = require("../controllers/list.controller");
-
+const { authJwt } = require("../middleware");
 module.exports = function (app) {
   app.use(function (req, res, next) {
     res.header(
@@ -9,8 +9,8 @@ module.exports = function (app) {
     next();
   });
 
-  app.post("/api/list/new", controller.newList);
-  app.post("/api/list/getall", controller.getAllLists);
-  app.post("/api/list/update", controller.updateList);
-  app.post("/api/list/archive", controller.archiveList);
+  app.post("/api/list/new", authJwt.verifyToken, controller.newList);
+  app.post("/api/list/getall", authJwt.verifyToken, controller.getAllLists);
+  app.post("/api/list/update", authJwt.verifyToken, controller.updateList);
+  app.post("/api/list/archive", authJwt.verifyToken, controller.archiveList);
 };
