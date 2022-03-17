@@ -51,3 +51,10 @@ Be sure you have already installed some soft ware to create a mysql schema like 
   
 12. Once this is done and "npm install" is ready you should be able to start the backend with:
   nodemon server.js
+
+
+Additional notes:
+
+- in qdo/server/config/db.config.js you can find the exact configuration of the MySQl
+
+- Port 3001 has to be free for the backend
