@@ -12,6 +12,8 @@ How to get started:
          
       
 ############################### FRONT END ######################################
+
+
 4. Once the repository is cloned go into the "client"-directory with the following command:
   cd client
  
@@ -23,6 +25,7 @@ How to get started:
   npm start
 
 ############################### BACK END ######################################  
+
 
 
 Be sure you have already installed some soft ware to create a mysql schema like MYSQL WORKBENCH, NODE Version 12 or higher and XAMPP
