@@ -1,19 +1,12 @@
 import "./App.css";
-import {
-  Routes,
-  Route,
-  Link,
-  Navigate,
-  useNavigate,
-  useLocation,
-} from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { LoginPage, MainPage, RegistrationPage } from "./pages";
 import { AuthProvider, useAuth } from "./context/auth";
 import { Layout } from "./layouts/Layout";
-import { UserProvider } from "./context/user";
 import { TodosProvider } from "./context/todo";
 import { ListsProvider } from "./context/list";
 import { useEffect } from "react";
+import { SubtodosProvider } from "./context/subtodo";
 
 function App() {
   return (
@@ -25,15 +18,15 @@ function App() {
           path="/home"
           element={
             <RequireAuth>
-              <UserProvider>
-                <ListsProvider>
-                  <TodosProvider>
+              <ListsProvider>
+                <TodosProvider>
+                  <SubtodosProvider>
                     <Layout>
                       <MainPage />
                     </Layout>
-                  </TodosProvider>
-                </ListsProvider>
-              </UserProvider>
+                  </SubtodosProvider>
+                </TodosProvider>
+              </ListsProvider>
             </RequireAuth>
           }
         />
@@ -44,7 +37,6 @@ function App() {
 
 const RequireAuth = ({ children }) => {
   let location = useLocation();
-  let navigate = useNavigate();
   const { user } = useAuth();
   useEffect(() => {
     console.log(user);

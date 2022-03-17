@@ -31,11 +31,11 @@ export const Provider = ({ children }) => {
       })
       .then((res) => {
         if (res.data.accessToken) {
-          console.log("updateuserresponse ", res.data);
           localStorage.setItem("user", JSON.stringify(res.data));
         }
         getCurrentUser();
-        return res.data;
+        refreshToken();
+        return;
       })
       .catch((err) => {});
   };
@@ -52,11 +52,7 @@ export const Provider = ({ children }) => {
 
   const refreshToken = () => {
     return axios
-      .post(
-        API_URL + "refreshToken",
-        { refreshToken: user.refreshToken.token },
-        { headers: authHeader() }
-      )
+      .post(API_URL + "refreshToken", { refreshToken: user.refreshToken.token })
       .then((res) => {
         console.log("REFRESH: ", res);
         if (res.data.accessToken) {
@@ -76,6 +72,42 @@ export const Provider = ({ children }) => {
       return {};
     }
   };
+  const updateUser = (username, email) => {
+    return axios
+      .post(
+        API_URL + "update",
+        {
+          userId: user.id,
+          username: username,
+        },
+        { headers: authHeader() }
+      )
+      .then((res, err) => {
+        refreshToken();
+      })
+      .catch((err) => {
+        if (err.status === 401) refreshToken();
+      });
+  };
+
+  const changePassword = (oldPassword, newPassword) => {
+    return axios
+      .post(
+        API_URL + "changepassword",
+        {
+          userId: user.id,
+          oldPassword: oldPassword,
+          newPassword: newPassword,
+        },
+        { headers: authHeader() }
+      )
+      .then((res) => {
+        refreshToken();
+      })
+      .catch((err) => {
+        if (err.status === 401) refreshToken();
+      });
+  };
 
   useEffect(() => {
     getCurrentUser();
@@ -92,7 +124,6 @@ export const Provider = ({ children }) => {
     signInUser: signInUser,
     logout: logout,
     user: user,
-    getCurrentUser: getCurrentUser,
     authHeader: authHeader,
     refreshToken: refreshToken,
   };

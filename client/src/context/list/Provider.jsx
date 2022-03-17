@@ -5,7 +5,7 @@ import { Context } from "./Context";
 
 export const Provider = ({ children }) => {
   const API_URL = "http://localhost:3001/api/list/";
-  const { user, authHeader } = useAuth();
+  const { user, authHeader, refreshToken } = useAuth();
   const [currentList, setCurrentList] = useState({});
   const [lists, setLists] = useState({});
 
@@ -15,7 +15,9 @@ export const Provider = ({ children }) => {
       .then((res) => {
         setLists(res.data);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        if (err.status === 401) refreshToken();
+      });
   };
 
   const newList = (title) => {
@@ -28,7 +30,9 @@ export const Provider = ({ children }) => {
       .then((res) => {
         getLists();
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        if (err.status === 401) refreshToken();
+      });
   };
 
   const updateList = (listId, title) => {
@@ -43,7 +47,9 @@ export const Provider = ({ children }) => {
         { headers: authHeader() }
       )
       .then((res) => getLists())
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        if (err.status === 401) refreshToken();
+      });
   };
 
   const deleteList = (listId) => {
@@ -57,7 +63,9 @@ export const Provider = ({ children }) => {
         { headers: authHeader() }
       )
       .then((res) => getLists())
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        if (err.status === 401) refreshToken();
+      });
   };
 
   useEffect(() => {

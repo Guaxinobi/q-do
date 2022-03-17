@@ -80,6 +80,7 @@ export const Layout = ({ children }) => {
             <List
               list={lists}
               setList={setLists}
+              isItem={false}
               updateItem={updateList}
               deleteItem={deleteList}
               setCurrentItem={setCurrentList}

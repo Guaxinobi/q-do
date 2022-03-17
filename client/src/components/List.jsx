@@ -1,43 +1,56 @@
 import { useState } from "react/cjs/react.development";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import ReactLoading from "react-loading";
 import { useEffect } from "react";
 import { PencilAltIcon } from "@heroicons/react/outline";
-import { XIcon } from "@heroicons/react/solid";
+import { XIcon, ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/solid";
 
 export const Component = ({
   list,
   setList,
-  isTodo,
+  hasSubitem,
+  isSubitem,
   updateItem,
   deleteItem,
   currentItem,
   setCurrentItem,
   checkItem,
+  children,
+  checkable,
 }) => {
   const [editItemText, setEditItemText] = useState(false);
-  const [currentIndex, setCurrentIndex] = useState(-1);
+  const [editIndex, setEditIndex] = useState(-1);
   const [currentText, setCurrentText] = useState("");
+  const [showSubs, setShowSubs] = useState(false);
+  const [showSubsIndex, setShowSubsIndex] = useState(-1);
 
   const toggleEditItemText = (e, index, id, title) => {
     e.preventDefault();
     if (editItemText) {
       updateItem(id, currentText).then((res) => {
         setEditItemText(false);
-        setCurrentIndex(null);
+        setEditIndex(null);
         setCurrentText("");
       });
     } else {
       setCurrentText(title);
       setEditItemText(true);
-      setCurrentIndex(index);
+      setEditIndex(index);
     }
   };
 
+  const toggleShowSubitems = (id) => {
+    setShowSubs(!showSubs);
+    setShowSubsIndex(id);
+  };
+
+  useEffect(() => {
+    if (showSubs) return;
+    setShowSubsIndex(-1);
+  }, [showSubs]);
+
   const handleClickOnItem = (e, item) => {
-    console.log("handleclickonitem");
     e.preventDefault();
-    if (isTodo) return;
+    if (isSubitem) return;
     setCurrentItem(item);
   };
 
@@ -82,108 +95,153 @@ export const Component = ({
     console.log("CURRENTITEM: ", currentItem);
   }, [currentItem]);
 
-  if (!list.length) {
-    return <div>No list available</div>;
+  if (!list?.length) {
+    return <div> </div>;
   } else {
     return (
       <div className=" h-full">
         <DragDropContext onDragEnd={onDragEnd}>
-          <Droppable droppableId="uncompleted-list" className="todo-list">
+          <Droppable droppableId="uncompleted-list" className="list">
             {(provided) => (
-              <div ref={provided.innerRef} {...provided.droppableProps}>
-                {list.map((item, index) => {
-                  return (
-                    <Draggable
-                      key={item.id}
-                      index={index}
-                      draggableId={`id-${item.id}`}
-                    >
-                      {(provided) => (
-                        <div
-                          onClick={(e) => {
-                            handleClickOnItem(e, item);
-                          }}
-                          className={`todo justify-between ${
-                            item.id === currentItem?.id && !isTodo
-                              ? ` active-item `
-                              : ` `
-                          }`}
-                          key={index}
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                        >
+              <div>
+                <div ref={provided.innerRef} {...provided.droppableProps}>
+                  {list.map((item, index) => {
+                    return (
+                      <Draggable
+                        key={item.id}
+                        index={index}
+                        draggableId={`id-${item.id}`}
+                      >
+                        {(provided) => (
                           <div>
-                            <div className="flex align-center">
-                              {isTodo && (
-                                <label className="checkbox-container">
-                                  <input
-                                    type="checkbox"
-                                    checked={item.checked}
-                                    onChange={(e) => {
-                                      handleCheck(e, item.id, item.checked);
-                                    }}
-                                    id={`item-${index}`}
-                                  />
-                                  <span
-                                    onClick={(e) => {
-                                      handleCheck(e, item.id, item.checked);
-                                    }}
-                                    className="checkmark"
-                                  ></span>
-                                </label>
-                              )}
-                              {currentIndex !== index && (
-                                <label
-                                  htmlFor={`item-${index}`}
-                                  className="item-text"
-                                >
-                                  {item.title}
-                                </label>
-                              )}
-                              <form
-                                hidden={index !== currentIndex || !editItemText}
-                                onSubmit={(e) => {
-                                  toggleEditItemText(
-                                    e,
-                                    index,
-                                    item.id,
-                                    item.title
-                                  );
+                            <div>
+                              {" "}
+                              <div
+                                onClick={(e) => {
+                                  handleClickOnItem(e, item);
                                 }}
+                                className={` justify-between ${
+                                  item?.checked ? ` checked ` : ` item `
+                                } ${
+                                  item.id === currentItem?.id && !hasSubitem
+                                    ? ` active-item `
+                                    : ` `
+                                } ${isSubitem ? ` subitem ` : ` `}`}
+                                key={index}
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
                               >
-                                <input
-                                  value={currentText}
-                                  onChange={(e) =>
-                                    setCurrentText(e.target.value)
-                                  }
-                                />
-                              </form>
+                                <div>
+                                  <div className="flex align-center">
+                                    {checkable && (
+                                      <label className="checkbox-container">
+                                        <input
+                                          type="checkbox"
+                                          checked={item.checked}
+                                          onChange={(e) => {
+                                            handleCheck(
+                                              e,
+                                              item.id,
+                                              item.checked
+                                            );
+                                          }}
+                                          id={`item-${index}`}
+                                        />
+                                        <span
+                                          onClick={(e) => {
+                                            handleCheck(
+                                              e,
+                                              item.id,
+                                              item.checked
+                                            );
+                                          }}
+                                          className="checkmark"
+                                        ></span>
+                                      </label>
+                                    )}
+                                    {hasSubitem &&
+                                      (showSubs && showSubsIndex === item.id ? (
+                                        <ChevronUpIcon
+                                          onClick={(e) => {
+                                            handleClickOnItem(e, item);
+                                            toggleShowSubitems(item.id);
+                                          }}
+                                          className="chevron"
+                                        />
+                                      ) : (
+                                        <ChevronDownIcon
+                                          onClick={(e) => {
+                                            handleClickOnItem(e, item);
+                                            toggleShowSubitems(item.id);
+                                          }}
+                                          className="chevron"
+                                        />
+                                      ))}
+
+                                    {editIndex !== index && (
+                                      <label
+                                        htmlFor={`item-${index}`}
+                                        className="item-text"
+                                      >
+                                        {item.title}
+                                      </label>
+                                    )}
+                                    <form
+                                      hidden={
+                                        index !== editIndex || !editItemText
+                                      }
+                                      onSubmit={(e) => {
+                                        toggleEditItemText(
+                                          e,
+                                          index,
+                                          item.id,
+                                          item.title
+                                        );
+                                      }}
+                                    >
+                                      <input
+                                        value={currentText}
+                                        onChange={(e) =>
+                                          setCurrentText(e.target.value)
+                                        }
+                                      />
+                                    </form>
+                                  </div>
+                                </div>
+                                <div className="flex">
+                                  <PencilAltIcon
+                                    onClick={(e) =>
+                                      toggleEditItemText(
+                                        e,
+                                        index,
+                                        item.id,
+                                        item.title
+                                      )
+                                    }
+                                    className="pencil-icon"
+                                  />
+                                  <XIcon
+                                    onClick={(e) => handleDelete(e, item.id)}
+                                    className="x-icon"
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                            <div>
+                              {hasSubitem &&
+                                showSubs &&
+                                showSubsIndex === item.id && (
+                                  <div>{children}</div>
+                                )}
                             </div>
                           </div>
-                          <div className="flex">
-                            <PencilAltIcon
-                              onClick={(e) =>
-                                toggleEditItemText(
-                                  e,
-                                  index,
-                                  item.id,
-                                  item.title
-                                )
-                              }
-                              className="pencil-icon"
-                            />
-                            <XIcon
-                              onClick={(e) => handleDelete(e, item.id)}
-                              className="x-icon"
-                            />
-                          </div>
-                        </div>
-                      )}
-                    </Draggable>
-                  );
-                })}
-                {provided.placeholder}
+                        )}
+                      </Draggable>
+                    );
+                  })}
+                  {provided.placeholder}
+                </div>
               </div>
             )}
           </Droppable>

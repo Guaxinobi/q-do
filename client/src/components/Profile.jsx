@@ -1,16 +1,14 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/auth";
-import { useUser } from "../context/user";
 
 export const Component = () => {
-  const { user } = useAuth();
-  const { updateUser, changePassword } = useUser();
+  const { user, updateUser, changePassword } = useAuth();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [isOldPasswordWrong, setIsOldPasswordWrong] = useState(false);
-  const [tooShort, setTooShort] = useState(false);
+  const [usernameTooShort, setUsernameTooShort] = useState(false);
   const [passwordTooShort, setPasswordTooShort] = useState(false);
 
   useEffect(() => {
@@ -21,7 +19,7 @@ export const Component = () => {
 
   const handleSubmitChanges = (e) => {
     if (username.length < 2) {
-      setTooShort(true);
+      setUsernameTooShort(true);
       return;
     }
     e.preventDefault();
@@ -54,7 +52,7 @@ export const Component = () => {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           ></input>
-          {tooShort && <span>username too short.</span>}
+          {usernameTooShort && <span>username too short.</span>}
           <label>E-Mail</label>
           <input
             disabled

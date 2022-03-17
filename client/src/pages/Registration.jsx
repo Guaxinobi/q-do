@@ -9,7 +9,6 @@ export const Page = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [isRegistrated, setIsRegistrated] = useState(false);
 
   const { signUpUser } = useAuth();
 
@@ -27,82 +26,71 @@ export const Page = () => {
   };
 
   useEffect(() => {}, [username, password, confirmPassword]);
-  useEffect(() => {}, [isRegistrated]);
-  if (isRegistrated) {
-    setTimeout(() => {
-      setIsRegistrated(false);
-      return (
-        <div>
-          LOADING
-          <ReactLoading type="spinningBubbles" color="#00ff00" />
-        </div>
-      );
-    }, 5000);
-  } else {
-    return (
-      <div className="flex login-page ">
-        <div className="login-container flex-grow">
-          <div className="items-center">
-            <h1 className="logo">Q-Do</h1>
-          </div>
-          <div className="items-center">
-            <h2>Registration</h2>
-          </div>
-          <div className="flex-col">
-            <form onSubmit={onSignUp} className="flex-col">
-              <label>Username</label>
-              <input
-                name="username"
-                type="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-              />
-              <label>E-mail</label>
-              <input
-                name="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
 
-              <label>Password</label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                name="password"
-              />
-              <span className="text-sm" hidden={password === confirmPassword}>
-                The passwords do not match!
-              </span>
-              <label>Confirm Password</label>
-              <input
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                name="password"
-              />
-              <button
-                disabled={password !== confirmPassword && !username}
-                type="submit"
-                className="button"
-              >
-                Sign Up
-              </button>
-              <span className="text-lg">
-                Back to{" "}
-                <span className="link" onClick={() => navigate("/")}>
-                  Login
-                </span>
-              </span>
-            </form>
-          </div>
+  return (
+    <div className="flex login-page ">
+      <div className="login-container flex-grow">
+        <div className="items-center">
+          <h1 className="logo">Q-Do</h1>
         </div>
-        <div className="flex-grow"></div>
+        <div className="items-center">
+          <h2>Registration</h2>
+        </div>
+        <div className="flex-col">
+          <form onSubmit={onSignUp} className="flex-col">
+            <label>Username</label>
+            <input
+              name="username"
+              type="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <label>E-mail</label>
+            <input
+              name="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+
+            <label>Password</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              name="password"
+            />
+            <span className="text-sm" hidden={password === confirmPassword}>
+              The passwords do not match!
+            </span>
+            <label>Confirm Password</label>
+            <input
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              name="password"
+            />
+            <button
+              disabled={password !== confirmPassword && !username}
+              type="submit"
+              className="button"
+            >
+              Sign Up
+            </button>
+            <span className="text-lg">
+              Back to{" "}
+              <span className="link" onClick={() => navigate("/")}>
+                Login
+              </span>
+            </span>
+          </form>
+        </div>
       </div>
-    );
-  }
+      <div className="flex-grow"></div>
+    </div>
+  );
 };
+
 /*
 
 

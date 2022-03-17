@@ -1,4 +1,4 @@
-import { List } from "../components";
+import { List, SubitemList } from "../components";
 import { useTodo } from "../context/todo";
 import ReactLoading from "react-loading";
 import { useEffect, useState } from "react";
@@ -6,8 +6,16 @@ import { useAuth } from "../context/auth";
 import { NewItem } from "../components";
 import { useList } from "../context/list";
 export const Page = () => {
-  const { todos, setTodos, newTodo, updateTodo, archiveTodo, checkTodo } =
-    useTodo();
+  const {
+    todos,
+    setTodos,
+    newTodo,
+    updateTodo,
+    archiveTodo,
+    checkTodo,
+    currentTodo,
+    setCurrentTodo,
+  } = useTodo();
   const { user } = useAuth();
   const { currentList } = useList();
   const [title, setTitle] = useState("new todo");
@@ -47,11 +55,17 @@ export const Page = () => {
           <List
             list={todos}
             setList={setTodos}
-            isTodo={true}
+            isItem={true}
+            hasSubitem={true}
             updateItem={updateTodo}
             deleteItem={archiveTodo}
             checkItem={checkTodo}
-          />
+            currentItem={currentTodo}
+            setCurrentItem={setCurrentTodo}
+            checkable={true}
+          >
+            <SubitemList />
+          </List>
         </div>
       );
     }

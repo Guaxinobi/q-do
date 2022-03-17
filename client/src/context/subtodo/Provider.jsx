@@ -1,56 +1,55 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useAuth } from "../auth";
-import { useList } from "../list";
+import { useTodo } from "../todo";
 import { Context } from "./Context";
 
 export const Provider = ({ children }) => {
-  const API_URL = "http://localhost:3001/api/todo/";
-  const { currentList } = useList();
+  const API_URL = "http://localhost:3001/api/subtodo/";
+  const { currentTodo } = useTodo();
   const { authHeader, refreshToken } = useAuth();
-  const [todos, setTodos] = useState([]);
-  const [currentTodo, setCurrentTodo] = useState({});
+  const [subtodos, setSubtodos] = useState([]);
 
   const getAll = () => {
-    if (!currentList.id) return;
+    if (!currentTodo.id) return;
     return axios
       .post(
         API_URL + "getall",
-        { listId: currentList.id },
+        { todoId: currentTodo.id },
         { headers: authHeader() }
       )
       .then((res) => {
         console.log("TODOS: ", res);
-        setTodos([...res.data]);
+        setSubtodos([...res.data]);
       })
       .catch((err) => {
         if (err.status === 401) refreshToken();
       });
   };
-  const newTodo = (title) => {
+  const newSubtodo = (title) => {
     return axios
       .post(
-        API_URL + "newtodo",
+        API_URL + "newsubtodo",
         {
-          listId: currentList.id,
+          todoId: currentTodo.id,
           title: title,
         },
         { headers: authHeader() }
       )
       .then((res) => {
-        console.log("NEW TODO!!!");
+        console.log("NEW SUBTODOTODO!!!");
         getAll();
       })
       .catch((err) => {
         if (err.status === 401) refreshToken();
       });
   };
-  const updateTodo = (todoId, title) => {
+  const updateSubtodo = (todoId, title) => {
     return axios
       .post(
-        API_URL + "updatetodo",
+        API_URL + "updatesubtodo",
         {
-          listId: currentList.id,
+          todoId: currentTodo.id,
           title: title,
           todoId: todoId,
         },
@@ -63,12 +62,12 @@ export const Provider = ({ children }) => {
         if (err.status === 401) refreshToken();
       });
   };
-  const archiveTodo = (todoId) => {
+  const archiveSubtodo = (todoId) => {
     return axios
       .post(
-        API_URL + "archivetodo",
+        API_URL + "archivesubtodo",
         {
-          listId: currentList.id,
+          todoId: currentTodo.id,
           todoId: todoId,
         },
         { headers: authHeader() }
@@ -80,12 +79,12 @@ export const Provider = ({ children }) => {
         if (err.status === 401) refreshToken();
       });
   };
-  const checkTodo = (todoId, checked) => {
+  const checkSubtodo = (todoId, checked) => {
     return axios
       .post(
-        API_URL + "checktodo",
+        API_URL + "checksubtodo",
         {
-          listId: currentList.id,
+          todoId: currentTodo.id,
           todoId: todoId,
           checked: checked,
         },
@@ -100,26 +99,23 @@ export const Provider = ({ children }) => {
   };
 
   useEffect(() => {
-    if (!currentList) return;
-    getAll();
-  }, [currentList]);
-
-  useEffect(() => {}, [todos]);
-
-  useEffect(() => {
+    console.log("currentTodo: ", currentTodo);
     if (!currentTodo) return;
+    getAll();
   }, [currentTodo]);
 
+  useEffect(() => {
+    console.log("TODOPROVIDER: ", subtodos);
+  }, [subtodos]);
+
   const contextValue = {
-    todos: todos,
-    setTodos: setTodos,
+    subtodos: subtodos,
+    setSubtodos: setSubtodos,
     getAll: getAll,
-    newTodo: newTodo,
-    updateTodo: updateTodo,
-    archiveTodo: archiveTodo,
-    checkTodo: checkTodo,
-    currentTodo: currentTodo,
-    setCurrentTodo: setCurrentTodo,
+    newSubtodo: newSubtodo,
+    updateSubtodo: updateSubtodo,
+    archiveSubtodo: archiveSubtodo,
+    checkSubtodo: checkSubtodo,
   };
 
   return <Context.Provider value={contextValue}>{children}</Context.Provider>;
