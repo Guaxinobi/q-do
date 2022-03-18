@@ -9,12 +9,14 @@ export const Page = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [usernameTooShort, setUsernameTooShort] = useState(false);
 
   const { signUpUser } = useAuth();
 
   const onSignUp = (e) => {
     e.preventDefault();
     if (password !== confirmPassword) return;
+    if (username.length < 2) return setUsernameTooShort(true);
     signUpUser(username, email, password)
       .then((res) => {
         setIsRegistrated(true);
@@ -45,6 +47,7 @@ export const Page = () => {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
+            {usernameTooShort && <span>username too short.</span>}
             <label>E-mail</label>
             <input
               name="email"

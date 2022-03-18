@@ -10,6 +10,16 @@ export const Provider = ({ children }) => {
 
   const API_URL = "http://localhost:3001/api/auth/";
 
+  const authHeader = () => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user && user.accessToken) {
+      console.log("SET TOKEN");
+      return { "x-access-token": user.accessToken };
+    } else {
+      return {};
+    }
+  };
+
   const signUpUser = (name, email, password) => {
     return axios
       .post(API_URL + "signup", {
@@ -34,7 +44,7 @@ export const Provider = ({ children }) => {
           localStorage.setItem("user", JSON.stringify(res.data));
         }
         getCurrentUser();
-        refreshToken();
+
         return;
       })
       .catch((err) => {});
@@ -46,17 +56,19 @@ export const Provider = ({ children }) => {
   };
 
   const getCurrentUser = () => {
-    console.log("getCurrentUser: ", localStorage.getItem("user"));
     setUser(JSON.parse(localStorage.getItem("user")));
   };
 
   const refreshToken = () => {
+    console.log("USERREFRESHTOKEN: ", user);
     return axios
-      .post(API_URL + "refreshToken", { refreshToken: user.refreshToken.token })
+      .post(
+        API_URL + "refreshToken",
+        { refreshToken: user.refreshToken.token },
+        { headers: authHeader() }
+      )
       .then((res) => {
-        console.log("REFRESH: ", res);
         if (res.data.accessToken) {
-          console.log("updateuserresponse ", res.data);
           localStorage.setItem("user", JSON.stringify(res.data));
         }
         getCurrentUser();
@@ -64,14 +76,6 @@ export const Provider = ({ children }) => {
       });
   };
 
-  const authHeader = () => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (user && user.accessToken) {
-      return { "x-access-token": user.accessToken };
-    } else {
-      return {};
-    }
-  };
   const updateUser = (username, email) => {
     return axios
       .post(
@@ -82,7 +86,7 @@ export const Provider = ({ children }) => {
         },
         { headers: authHeader() }
       )
-      .then((res, err) => {
+      .then((res) => {
         refreshToken();
       })
       .catch((err) => {
@@ -101,9 +105,7 @@ export const Provider = ({ children }) => {
         },
         { headers: authHeader() }
       )
-      .then((res) => {
-        refreshToken();
-      })
+      .then((res) => {})
       .catch((err) => {
         if (err.status === 401) refreshToken();
       });
@@ -116,6 +118,7 @@ export const Provider = ({ children }) => {
   useEffect(() => {
     console.log("AUTH: ", user);
     if (!user) return navigate("/");
+
     navigate("/home");
   }, [user]);
 
@@ -126,6 +129,8 @@ export const Provider = ({ children }) => {
     user: user,
     authHeader: authHeader,
     refreshToken: refreshToken,
+    updateUser: updateUser,
+    changePassword: changePassword,
   };
 
   return <Context.Provider value={contextValue}>{children}</Context.Provider>;

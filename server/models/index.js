@@ -8,6 +8,8 @@ const sequelize = new Sequelize(config.DB, config.USER, config.PASSWORD, {
 const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
+
+//import models
 db.user = require("../models/user.model.js")(sequelize, Sequelize);
 db.list = require("../models/list.model.js")(sequelize, Sequelize);
 db.todo = require("../models/todo.model.js")(sequelize, Sequelize);
@@ -17,6 +19,7 @@ db.refreshToken = require("../models/refreshToken.model.js")(
   Sequelize
 );
 
+// implementation of the model relations
 db.user.hasOne(db.refreshToken);
 db.refreshToken.belongsTo(db.user);
 db.user.hasMany(db.list);
